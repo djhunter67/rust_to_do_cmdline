@@ -1,3 +1,9 @@
+mod args;
+
+use args::ToDoArgs;
+use clap::Parser;
+
 fn main() {
-    println!("Hello, world!");
+    let args = ToDoArgs::parse();
+    println!("{args:?}");
 }
