@@ -1,8 +1,8 @@
-Author: Hunter, Christerpher
+# Author: Hunter, Christerpher
 
-All notable changes will be appended here.
+## All notable changes will be appended here
 
-This project, henceforth, will recongnize [semantic versioning](https://semver.org/).
+### This project, henceforth, will recongnize [semantic versioning](https://semver.org/)
 
 ## [⭐.✴️.✳️] - YEAR MONTH DAY
 
@@ -19,3 +19,4 @@ Here we write upgrade and change notes.
 ## [0.0.1] - 2023 FEB 11
 
 - cargo init
+- Achieved minimum viable product status.

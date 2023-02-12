@@ -1,3 +1,6 @@
+use super::super::traits::edit::Edit;
+use super::super::traits::get::Get;
+
 use super::super::enums::TaskStatus;
 use super::base::Base;
 
@@ -17,3 +20,6 @@ impl Delayed {
         }
     }
 }
+
+impl Get for Delayed {}
+impl Edit for Delayed {}

@@ -1,3 +1,7 @@
+use super::super::traits::delete::Delete;
+use super::super::traits::edit::Edit;
+use super::super::traits::get::Get;
+
 use super::super::enums::TaskStatus;
 use super::base::Base;
 
@@ -17,3 +21,7 @@ impl Abandoned {
         }
     }
 }
+
+impl Get for Abandoned {}
+impl Delete for Abandoned {}
+impl Edit for Abandoned {}
