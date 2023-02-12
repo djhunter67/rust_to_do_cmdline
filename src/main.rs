@@ -1,19 +1,17 @@
 mod args;
+mod processes;
 mod to_do;
 
 // use args::ToDoArgs;
 // use clap::Parser;
 use args::read_file;
-use args::write_file;
+use processes::process_input;
 use serde_json::value::Value;
-use serde_json::{json, Map};
+use serde_json::Map;
 use std::env;
-use to_do::{
-    enums::TaskStatus,
-    to_do_factory,
-    traits::{edit::Edit, get::Get},
-    ItemTypes,
-};
+use to_do::{enums::TaskStatus, to_do_factory};
+
+use crate::to_do::ItemTypes;
 
 fn main() {
     // let args = ToDoArgs::parse();
@@ -21,37 +19,64 @@ fn main() {
 
     let args: Vec<String> = env::args().collect();
 
-    let status: String = args[1].clone();
-    let task: String = args[2].clone();
+    let mut command: &str = &args[1];
+    let title: &String = &args[2];
 
-    let mut state: Map<String, Value> = read_file("./state.json");
+    let state: Map<String, Value> = read_file("./state.json");
 
-    println!("Before operation: {state:?}");
+    // let status: String = match command.as_str() {
+    //     "create" => "Pending".to_string(),
+    //     "edit" => "Pending".to_string(),
+    //     "delete" => "Completed".to_string(),
+    //     "get" => "Pending".to_string(),
+    //     "abandoned" => "Abandoned".to_string(),
+    //     "delayed" => "Delayed".to_string(),
+    //     _ => "Pending".to_string(),
+    // };
 
-    state.insert(task, json!(status));
+    let status = match &state.get(title) {
+        Some(result) => result.to_string().replace('\"', ""),
+        None => "pending".to_owned(),
+    };
 
-    println!("After operation: {state:?}");
+    let edit = String::from("edit");
+    let delayed = String::from("delayed");
+    let abandoned = String::from("abandoned");
+    let completed = String::from("completed");
+    let delete = String::from("delete");
 
-    write_file("./state.json", &mut state);
+    let item: ItemTypes = match command {
+        "edit" => to_do_factory(title, TaskStatus::from(status.to_uppercase())),
 
-    let to_do_item = to_do_factory("Laundry", TaskStatus::Completed);
-
-    match to_do_item {
-        ItemTypes::Pending(pending) => {
-            pending.get(&pending.super_struct.task);
-            pending.change_to_pending(&pending.super_struct.task);
+        "delayed" => {
+            command = edit.as_str();
+            to_do_factory(title, TaskStatus::from(delayed.to_uppercase()))
         }
-        ItemTypes::Completed(completed) => {
-            completed.get(&completed.super_struct.task);
-            completed.change_to_completed(&completed.super_struct.task);
+
+        "abandoned" => {
+            command = edit.as_str();
+            to_do_factory(title, TaskStatus::from(abandoned.to_uppercase()))
         }
-        ItemTypes::Delayed(delayed) => {
-            delayed.get(&delayed.super_struct.task);
-            delayed.change_to_delayed(&delayed.super_struct.task);
+
+        "completed" => {
+            command = edit.as_str();
+            to_do_factory(title, TaskStatus::from(completed.to_uppercase()))
         }
-        ItemTypes::Abandoned(abandoned) => {
-            abandoned.get(&abandoned.super_struct.task);
-            abandoned.change_to_abandoned(&abandoned.super_struct.task);
+
+        "delete" => {
+            command = delete.as_str();
+            to_do_factory(title, TaskStatus::from(completed.to_uppercase()))
         }
-    }
+
+        _ => to_do_factory(title, TaskStatus::from(status.to_uppercase())),
+    };
+
+    // let status = "Completed";
+    println!("STATUS: {status}");
+
+    // let item = to_do_factory(title, TaskStatus::from(status.to_uppercase()));
+
+    println!("ITEM: {item:?}");
+
+    process_input(item, command, &state);
 }

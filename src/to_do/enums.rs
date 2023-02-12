@@ -1,6 +1,5 @@
 use serde::Serialize;
 
-
 #[derive(Debug, Serialize)]
 pub enum TaskStatus {
     Pending,
@@ -16,6 +15,18 @@ impl std::fmt::Display for TaskStatus {
             TaskStatus::Completed => write!(f, "COMPLETED"),
             TaskStatus::Delayed => write!(f, "DELAYED"),
             TaskStatus::Abandoned => write!(f, "ABANDONED"),
+        }
+    }
+}
+
+impl From<String> for TaskStatus {
+    fn from(status: String) -> Self {
+        match status.as_str() {
+            "PENDING" => TaskStatus::Pending,
+            "COMPLETED" => TaskStatus::Completed,
+            "DELAYED" => TaskStatus::Delayed,
+            "ABANDONED" => TaskStatus::Abandoned,
+            _ => panic!("Invalid status: {status} not supported"),
         }
     }
 }
