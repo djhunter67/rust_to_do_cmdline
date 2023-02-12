@@ -1,3 +1,8 @@
+
+use super::super::traits::get::Get;
+use super::super::traits::delete::Delete;
+use super::super::traits::edit::Edit;
+
 use super::super::enums::TaskStatus;
 use super::base::Base;
 
@@ -17,3 +22,7 @@ impl Completed {
         }
     }
 }
+
+impl Get for Completed {}
+impl Delete for Completed {}
+impl Edit for Completed {}
