@@ -1,6 +1,7 @@
 use super::super::enums::TaskStatus;
 
-struct Base {
-    task: String,
-    status: TaskStatus,
+#[derive(Debug)]
+pub struct Base {
+    pub task: String,
+    pub status: TaskStatus,
 }
