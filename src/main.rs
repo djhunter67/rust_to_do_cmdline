@@ -5,34 +5,22 @@ mod to_do;
 // use args::ToDoArgs;
 // use clap::Parser;
 use args::read_file;
+use clap::Parser;
 use processes::process_input;
 use serde_json::value::Value;
 use serde_json::Map;
-use std::env;
 use to_do::{enums::TaskStatus, to_do_factory};
 
-use crate::to_do::ItemTypes;
+use crate::{args::ToDoArgs, to_do::ItemTypes};
 
 fn main() {
-    // let args = ToDoArgs::parse();
-    // println!("{args:?}");
+    let args = ToDoArgs::parse();
+    println!("{args:?}");
 
-    let args: Vec<String> = env::args().collect();
-
-    let mut command: &str = &args[1];
-    let title: &String = &args[2];
+    let mut command: &str = &args.status;
+    let title: &String = &args.task;
 
     let state: Map<String, Value> = read_file("./state.json");
-
-    // let status: String = match command.as_str() {
-    //     "create" => "Pending".to_string(),
-    //     "edit" => "Pending".to_string(),
-    //     "delete" => "Completed".to_string(),
-    //     "get" => "Pending".to_string(),
-    //     "abandoned" => "Abandoned".to_string(),
-    //     "delayed" => "Delayed".to_string(),
-    //     _ => "Pending".to_string(),
-    // };
 
     let status = match &state.get(title) {
         Some(result) => result.to_string().replace('\"', ""),
@@ -70,13 +58,6 @@ fn main() {
 
         _ => to_do_factory(title, TaskStatus::from(status.to_uppercase())),
     };
-
-    // let status = "Completed";
-    println!("STATUS: {status}");
-
-    // let item = to_do_factory(title, TaskStatus::from(status.to_uppercase()));
-
-    println!("ITEM: {item:?}");
 
     process_input(item, command, &state);
 }
