@@ -7,13 +7,17 @@
 ## Usage
 
 ```bash
-cargo run create "This is a test"
-cargo run get "this is a test"
-cargo run edit "this is a test" 
-cargo run delayed "this is a test"
-cargo run abandoned "this is a test"
-cargo run completed "this is a test"
-cargo run deleted "this is a test"
+cargo run [COMMAND] "TO DO"
+```
+
+## Commands
+
+```text
+- edit
+- delayed
+- abandoned
+- completed
+- delete
 ```
 
 ## Installation
