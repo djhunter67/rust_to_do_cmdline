@@ -13,6 +13,7 @@ cargo run [COMMAND] "TO DO"
 ## Commands
 
 ```text
+- create
 - edit
 - delayed
 - abandoned
